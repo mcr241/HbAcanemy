@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
         if (distan.magnitude > 0.5f)
         {
             rigidbody.velocity = new Vector3((distan.normalized * speed).x, rigidbody.velocity.y, (distan.normalized * speed).z);
-            float angle = Vector2.Angle(Vector2.up, Input.mousePosition);
+            float angle = Vector3.Angle(Vector3.forward, distan);
          
             transform.GetChild(0).rotation = Quaternion.Euler(0, angle, 0);
         }
