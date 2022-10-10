@@ -1,0 +1,4 @@
+﻿*.vsconfig
+*.csproj
+StackMaker/StackMaker.sln
+BridgeRace/BridgeRace.sln
