@@ -3001,6 +3001,50 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 224019103266907943, guid: f206ccc114e101b4dafffd4915d4a812, type: 3}
   m_PrefabInstance: {fileID: 763382185}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &776985352
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 776985353}
+  - component: {fileID: 776985354}
+  m_Layer: 3
+  m_Name: TargerCamera
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &776985353
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 776985352}
+  m_LocalRotation: {x: 0.16287318, y: -0, z: -0, w: 0.98664707}
+  m_LocalPosition: {x: 0, y: 11.45, z: -13.84}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1819200952}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 18.747, y: 0, z: 0}
+--- !u!114 &776985354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 776985352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b192da97f05b1b4c8a26b71560dc91f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  camera: {fileID: 0}
 --- !u!1001 &778862319
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6637,7 +6681,10 @@ MonoBehaviour:
     m_Bits: 64
   block: {fileID: 1531101969777205, guid: 8aad5fca35890fd4389dabb982d52236, type: 3}
   human: {fileID: 1251005646}
+  material: {fileID: 2100000, guid: 0ed37345d2870a74894b21ae2023f323, type: 2}
+  listBlocks: []
   canMove: 0
+  isWin: 0
   directionMoving: 0
 --- !u!4 &1819200952
 Transform:
@@ -6651,6 +6698,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1677887105}
+  - {fileID: 776985353}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

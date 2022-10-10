@@ -23,41 +23,106 @@ public class Player : MonoBehaviour
     [SerializeField] GameObject block;
     [SerializeField] GameObject human;
 
-    List<GameObject> listBlocks = new List<GameObject>();
+    [SerializeField] Material material;
+
+    [SerializeField] List<GameObject> listBlocks = new List<GameObject>();
 
     public bool canMove;
+    public bool isWin;
     bool moving = false;
     public TypeDirection directionMoving;
     Vector3 firstMousePoint;
+    Quaternion rotationHuman;
 
-    private void OnEnable()
+    private void Start()
+    {
+        rotationHuman = human.transform.rotation;
+        Init();
+    }
+
+    private void Init()
     {
         ChangeAnim("idle");
+        human.transform.rotation = rotationHuman;
+        moving = false;
+        isWin = false;
     }
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (!isWin)
         {
-            canMove = true;
-            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit raycastHit))
+            if (Input.GetMouseButtonDown(0))
             {
-                firstMousePoint = raycastHit.point;
-            }
-        }
-
-        if (canMove && !moving)
-        {
-            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit raycastHit))
-            {
-                if (Vector3.Distance(firstMousePoint, raycastHit.point) >= 5f)
+                canMove = true;
+                firstMousePoint = Input.mousePosition;
+                //Debug.Log(firstMousePoint);
+                /*Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out RaycastHit raycastHit))
                 {
-                    float distanceX = raycastHit.point.x - firstMousePoint.x;
-                    float distanceZ = raycastHit.point.z - firstMousePoint.z;
+                    firstMousePoint = raycastHit.point;
+                }*/
+            }
+
+            if (canMove && !moving)
+            {
+                /*Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out RaycastHit raycastHit))
+                {
+                    if (Vector3.Distance(firstMousePoint, raycastHit.point) >= 3f)
+                    {
+                        float distanceX = raycastHit.point.x - firstMousePoint.x;
+                        float distanceZ = raycastHit.point.z - firstMousePoint.z;
+                        Vector3 direction;
+                        if (Mathf.Abs(distanceX) > Mathf.Abs(distanceZ))
+                        {
+                            if (distanceX > 0)
+                            {
+                                directionMoving = TypeDirection.Right;
+                                direction = Vector3.right;
+                            }
+                            else
+                            {
+                                directionMoving = TypeDirection.Left;
+                                direction = Vector3.left;
+                            }
+                        }
+                        else
+                        {
+                            if (distanceZ > 0)
+                            {
+                                directionMoving = TypeDirection.Forward;
+                                direction = Vector3.forward;
+                            }
+                            else
+                            {
+                                directionMoving = TypeDirection.Back;
+                                direction = Vector3.back;
+                            }
+                        }
+                        firstMousePoint = raycastHit.point;
+                        Vector3 posRay = transform.position + Vector3.up;
+                        //Debug.Log(posRay);
+                        while (Physics.Raycast(posRay, Vector3.down, 2, layerGround))
+                        {
+                            posRay += direction;
+                        }
+                        //Debug.Log(posRay - direction);
+                        Moving(posRay - direction - Vector3.up);
+
+
+                    }
+                    else
+                    {
+                        directionMoving = TypeDirection.Null;
+                    }
+                }*/
+                float distanceX = Input.mousePosition.x - firstMousePoint.x;
+                float distanceY = Input.mousePosition.y - firstMousePoint.y;
+                if (Mathf.Sqrt(distanceX * distanceX + distanceY * distanceY) >= 3f)
+                {
                     Vector3 direction;
-                    if (Mathf.Abs(distanceX) > Mathf.Abs(distanceZ))
+                    if (Mathf.Abs(distanceX) > Mathf.Abs(distanceY))
                     {
                         if (distanceX > 0)
                         {
@@ -72,7 +137,7 @@ public class Player : MonoBehaviour
                     }
                     else
                     {
-                        if (distanceZ > 0)
+                        if (distanceY > 0)
                         {
                             directionMoving = TypeDirection.Forward;
                             direction = Vector3.forward;
@@ -83,7 +148,7 @@ public class Player : MonoBehaviour
                             direction = Vector3.back;
                         }
                     }
-                    firstMousePoint = raycastHit.point;
+                    firstMousePoint = Input.mousePosition;
                     Vector3 posRay = transform.position + Vector3.up;
                     //Debug.Log(posRay);
                     while (Physics.Raycast(posRay, Vector3.down, 2, layerGround))
@@ -92,7 +157,7 @@ public class Player : MonoBehaviour
                     }
                     //Debug.Log(posRay - direction);
                     Moving(posRay - direction - Vector3.up);
-                    
+
 
                 }
                 else
@@ -100,12 +165,13 @@ public class Player : MonoBehaviour
                     directionMoving = TypeDirection.Null;
                 }
             }
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                canMove = false;
+            }
         }
 
-        if (Input.GetMouseButtonUp(0))
-        {
-            canMove = false; 
-        }
     }
 
     protected void ChangeAnim(string animName)
@@ -181,14 +247,16 @@ public class Player : MonoBehaviour
 
     public void Win()
     {
-        for (int i = listBlocks.Count-1; i>=0; i--)
+        while (listBlocks.Count > 0)
         {
             human.transform.localPosition = human.transform.localPosition + new Vector3(0, -0.45f, 0);
-            GameObject obj = listBlocks[i];
-            listBlocks.Remove(listBlocks[i]);
+            GameObject obj = listBlocks[listBlocks.Count - 1];
+            listBlocks.Remove(listBlocks[listBlocks.Count - 1]);
             Destroy(obj);
         }
         ChangeAnim("win");
+        human.transform.rotation = Quaternion.identity;
+        isWin = true;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -199,14 +267,13 @@ public class Player : MonoBehaviour
             //Debug.Log("hit");
             if (collision.gameObject.CompareTag("Block"))
             {
-                Debug.Log("add");
                 AddBlock();
                 Destroy(collision.gameObject);
             }
             else if(collision.gameObject.CompareTag("UnBlock"))
             {
-                Debug.Log("sub");
                 SubBlock();
+                collision.gameObject.GetComponent<MeshRenderer>().material = material;
             }
         }
     }
