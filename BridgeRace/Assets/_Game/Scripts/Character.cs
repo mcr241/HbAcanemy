@@ -2,54 +2,59 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public enum TypeColor
+{
+    Red, Green, Blue, Yellow, Null
+}
+
 public class Character : MonoBehaviour
 {
+    public TypeColor typeColor;
     [SerializeField] GameObject brickInPlayer;
     [SerializeField] GameObject brickInBridge;
     [SerializeField] Transform human;
     [SerializeField] List<GameObject> listBlocks = new List<GameObject>();
     [SerializeField] LayerMask layerBrick;
     [SerializeField] LayerMask layerBrickBridge;
-    [SerializeField] Material material;
+    public Material material;
     [SerializeField] float disBrickBridge;
     public bool isWin;
-    bool isOnBridge;
+    public bool isOnBridge;
     GameObject bridge;
-
-    private void Update()
-    {
-        if (isOnBridge)
-        {
-            if (listBlocks.Count > 0 && !Physics.Raycast(transform.position, Vector2.down, 2f, layerBrickBridge))
-                SubBrick();
-        }
-    }
 
     void AddBrick()
     {
-        GameObject obj = Instantiate(brickInPlayer, human.transform.position /*+ new Vector3(0, -0.46f, 0)*/, brickInPlayer.transform.rotation, transform);
-        human.transform.localPosition = human.transform.localPosition + new Vector3(0, 0.25f, 0);
+        GameObject obj = Instantiate(brickInPlayer, human.transform.position /*+ new Vector3(0, -0.46f, 0)*/, human.transform.rotation, transform.GetChild(0));
+        human.transform.localPosition = human.transform.localPosition + new Vector3(0, 0.22f, 0);
         //human.transform.DOLocalMove(human.transform.position + Vector3.up, timeJump);
         //ChangeAnim("jump");
         listBlocks.Add(obj);
     }
 
-    void SubBrick()
+    public void SubBrick()
     {
-        human.transform.localPosition = human.transform.localPosition + new Vector3(0, -0.25f, 0);
-        //human.transform.DOLocalMove(human.transform.position + Vector3.down, timeJump);
-        //ChangeAnim("jump");
-        GameObject obj = listBlocks[listBlocks.Count - 1];
-        listBlocks.Remove(listBlocks[listBlocks.Count - 1]);
-        Destroy(obj);
-        obj = Instantiate(brickInBridge, transform.position + Vector3.down, brickInBridge.transform.rotation, bridge.transform);
+        if (listBlocks.Count > 0)
+        {
+            human.transform.localPosition = human.transform.localPosition + new Vector3(0, -0.22f, 0);
+            //human.transform.DOLocalMove(human.transform.position + Vector3.down, timeJump);
+            //ChangeAnim("jump");
+            GameObject obj = listBlocks[listBlocks.Count - 1];
+            listBlocks.Remove(listBlocks[listBlocks.Count - 1]);
+            Destroy(obj);
+        }
+    }
+
+    public bool CanSubBrick()
+    {
+        return listBlocks.Count > 0;
     }
 
     public void Win()
     {
         while (listBlocks.Count > 0)
         {
-            human.transform.localPosition = human.transform.localPosition + new Vector3(0, -0.25f, 0);
+            human.transform.localPosition = human.transform.localPosition + new Vector3(0, -0.22f, 0);
             GameObject obj = listBlocks[listBlocks.Count - 1];
             listBlocks.Remove(listBlocks[listBlocks.Count - 1]);
             Destroy(obj);
@@ -95,16 +100,11 @@ public class Character : MonoBehaviour
     {
         if ((layerBrick.value & (1 << other.gameObject.layer)) > 0)
         {
-            if (other.CompareTag(gameObject.tag))
+            if (other.GetComponent<Brick>().typeColor == typeColor)
             {
                 AddBrick();
                 Destroy(other.gameObject);
             }
-            /*else if (other.CompareTag("UnBrick"))
-            {
-                SubBrick();
-                //collision.gameObject.GetComponent<MeshRenderer>().material = material;
-            }*/
         }
     }
 }

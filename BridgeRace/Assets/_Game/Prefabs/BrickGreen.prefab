@@ -7,6 +7,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -622346247800976620, guid: b3685a921561b4f4abce30c34435bce0, type: 3}
+      propertyPath: typeColor
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1533539814737217391, guid: b3685a921561b4f4abce30c34435bce0, type: 3}
       propertyPath: m_Name
       value: BrickGreen

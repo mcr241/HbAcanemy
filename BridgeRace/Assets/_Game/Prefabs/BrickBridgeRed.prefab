@@ -7,6 +7,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -3988365013159263572, guid: 7b86fb38125535749b3efa0d884af19b, type: 3}
+      propertyPath: typeColor
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1880322101743615283, guid: 7b86fb38125535749b3efa0d884af19b, type: 3}
       propertyPath: m_Name
       value: BrickBridgeRed
