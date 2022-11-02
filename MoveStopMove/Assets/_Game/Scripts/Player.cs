@@ -2,16 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : Character
+public class Player : Character
 {
     [SerializeField] float speed;
-    [SerializeField] Rigidbody rb;
     [SerializeField] Transform checkGround;
     [SerializeField] LayerMask layerGround;
     Vector3 fisrtPointJoystick;
     bool isOnJoystick;
+
+
+    bool CheckGround()
+    {
+        RaycastHit hit;
+        return Physics.Raycast(checkGround.position, Vector2.down, out hit, 1.5f, layerGround);
+    }
+
+
     private void Update()
     {
+        currentstate.OnStay(this);
+
         if (!isDead)
         {
             if (Input.GetMouseButtonDown(0))
@@ -26,52 +36,30 @@ public class PlayerController : Character
                 SetRotation(distan);
 
                 if (CheckGround())
-                    Move(distan);
+                {
+                    if (Vector3.Distance(Input.mousePosition, fisrtPointJoystick) > 0.5f)
+                    {
+                        SetState(new PlayerController());
+                        rb.velocity = new Vector3((distan.normalized * speed).x, rb.velocity.y, (distan.normalized * speed).z);
+                        ChangeAnim(Constant.ANIM_RUN);
+                    }
+                    else
+                    {
+                        SetState(new IdleState());
+                    }
+                }
                 else
                 {
-                    StopMove();
+                    SetState(new IdleState());
                 }
             }
 
             if (Input.GetMouseButtonUp(0))
             {
                 isOnJoystick = false;
-                StopMove();
+                SetState(new IdleState());
             }
-
-            AttackInUpdate();
-        }
-        else
-        {
-            DieInUpdate();
         }
     }
 
-
-    bool CheckGround()
-    {
-        RaycastHit hit;
-        return Physics.Raycast(checkGround.position, Vector2.down, out hit, 1.5f, layerGround);
-    }
-
-    private void Move(Vector3 distan)
-    {
-        if (distan.magnitude > 0.5f)
-        {
-            StopAttack();
-            rb.velocity = new Vector3((distan.normalized * speed).x, rb.velocity.y, (distan.normalized * speed).z);
-            ChangeAnim(Constant.ANIM_RUN);
-        }
-        else
-        {
-            StopMove();
-        }
-    }
-
-    void StopMove()
-    {
-        rb.velocity = new Vector3(0, rb.velocity.y, 0);
-        ChangeAnim(Constant.ANIM_IDLE);
-        if (CanAttack()) Attack();
-    }
 }

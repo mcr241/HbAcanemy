@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Character : MonoBehaviour, IHit
 {
+    public Rigidbody rb;
     [SerializeField] Animator animator;
     [SerializeField] GameObject weaponInHand;
     [SerializeField] GameObject weaponThrow;
@@ -12,12 +13,12 @@ public class Character : MonoBehaviour, IHit
     [SerializeField] Range range;
     [SerializeField] float rangeSize;
 
-    protected IState state;
     protected float timeAttack;
     protected float timeDie;
     public bool isDead = false;
     protected bool isAttacking = false;
     protected string nameAnimTotal = Constant.ANIM_IDLE;
+    [HideInInspector] public IState currentstate;
     public void ChangeAnim(string nameAnim)
     {
         if (nameAnim != nameAnimTotal)
@@ -46,17 +47,6 @@ public class Character : MonoBehaviour, IHit
         ChangeAnim(Constant.ANIM_DIE);
         isDead = true;
     }
-    protected void DieInUpdate()
-    {
-        if (isDead)
-        {
-            timeDie += Time.deltaTime;
-            if (timeDie >= timeDespawn)
-            {
-                Destroy(gameObject);
-            }
-        }
-    }
     public Character GetCharacterToAttack()
     {
         Character character = range.listCharacter[0];
@@ -70,30 +60,9 @@ public class Character : MonoBehaviour, IHit
         return character;
     }
 
-    protected bool CanAttack()
+    public bool CanAttack()
     {
         return range.listCharacter != null && range.listCharacter.Count > 0;
-    }
-
-    public void Attack()
-    {
-        SetRotation(GetCharacterToAttack().transform.position - transform.position);
-        ChangeAnim(Constant.ANIM_ATTACK);
-        timeAttack = 0;
-        isAttacking = true;
-    }
-
-    protected void AttackInUpdate()
-    {
-        if (isAttacking)
-        {
-            timeAttack += Time.deltaTime;
-            if (timeAttack >= timeThrow)
-            {
-                SpawnThrow();
-                StopAttack();
-            }
-        }
     }
 
     public void SpawnThrow()
@@ -103,10 +72,12 @@ public class Character : MonoBehaviour, IHit
         weapon.SetMaxSpace(rangeSize);
     }
 
-    public void StopAttack()
+    public void SetState(IState state)
     {
-        isAttacking = false;
-        ChangeAnim(Constant.ANIM_IDLE);
+        currentstate.OnExit(this);
+
+        currentstate = state;
+        currentstate.OnEnter(this);
     }
 
     public void Despawn()
