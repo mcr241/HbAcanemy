@@ -41,6 +41,10 @@ public class PlayerController : Character
 
             AttackInUpdate();
         }
+        else
+        {
+            DieInUpdate();
+        }
     }
 
 

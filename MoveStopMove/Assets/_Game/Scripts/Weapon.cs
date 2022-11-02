@@ -6,6 +6,7 @@ public class Weapon : MonoBehaviour
 {
     [SerializeField] Rigidbody rb;
     [SerializeField] float speed;
+    [SerializeField] float speedAngular;
     [SerializeField] float maxSpace;
 
     Vector3 firstPoint;
@@ -16,7 +17,10 @@ public class Weapon : MonoBehaviour
     }
     public void SetVelocity(Vector3 target)
     {
-        rb.velocity = speed * (target - transform.position).normalized;
+        Vector3 vector = target - transform.position;
+        vector.y = 0;
+        rb.velocity = speed * vector.normalized;
+        rb.angularVelocity = new Vector3(0, speedAngular, 0);
     }
 
     public void SetMaxSpace(float value)
@@ -39,12 +43,12 @@ public class Weapon : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Cache.GetHit(other);
+        Cache.GetHit(other).GetHit();
         Despawn();
     }
 
     void Despawn()
     {
-        //Destroy(gameObject);
+        Destroy(gameObject);
     }
 }

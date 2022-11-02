@@ -12,7 +12,6 @@ public class Cache
         {
             keyValuePairs.Add(collider, collider.GetComponent<IHit>());
         }
-
         return keyValuePairs[collider];
     }
 }

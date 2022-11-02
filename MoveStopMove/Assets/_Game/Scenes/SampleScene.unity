@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.2257134, b: 0.30692226, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -318,8 +318,10 @@ MonoBehaviour:
   weaponInHand: {fileID: 1634243300}
   weaponThrow: {fileID: 7439707912057253960, guid: 12e97525b61cad44d8d486bef7f04869, type: 3}
   timeThrow: 0.5
+  timeDespawn: 0
   range: {fileID: 912034790}
   rangeSize: 5
+  isDead: 0
   speed: 4
   rb: {fileID: 374970290}
   checkGround: {fileID: 685354780}
@@ -1215,8 +1217,10 @@ MonoBehaviour:
   weaponInHand: {fileID: 1224626340}
   weaponThrow: {fileID: 0}
   timeThrow: 0
+  timeDespawn: 0
   range: {fileID: 0}
   rangeSize: 0
+  isDead: 0
 --- !u!4 &1484193007
 Transform:
   m_ObjectHideFlags: 0

@@ -7,12 +7,15 @@ public class Character : MonoBehaviour, IHit
     [SerializeField] Animator animator;
     [SerializeField] GameObject weaponInHand;
     [SerializeField] GameObject weaponThrow;
-    [SerializeField] float timeThrow;
+    public float timeThrow;
+    public float timeDespawn;
     [SerializeField] Range range;
     [SerializeField] float rangeSize;
 
+    protected IState state;
     protected float timeAttack;
-    protected bool isDead = false;
+    protected float timeDie;
+    public bool isDead = false;
     protected bool isAttacking = false;
     protected string nameAnimTotal = Constant.ANIM_IDLE;
     public void ChangeAnim(string nameAnim)
@@ -25,7 +28,7 @@ public class Character : MonoBehaviour, IHit
         }
     }
 
-    protected void SetRotation(Vector3 distan)
+    public void SetRotation(Vector3 distan)
     {
         float angle = Vector3.Angle(Vector3.forward, distan);
         if (distan.x < 0) angle = -angle;
@@ -43,8 +46,18 @@ public class Character : MonoBehaviour, IHit
         ChangeAnim(Constant.ANIM_DIE);
         isDead = true;
     }
-
-    Character GetCharacterToAttack()
+    protected void DieInUpdate()
+    {
+        if (isDead)
+        {
+            timeDie += Time.deltaTime;
+            if (timeDie >= timeDespawn)
+            {
+                Destroy(gameObject);
+            }
+        }
+    }
+    public Character GetCharacterToAttack()
     {
         Character character = range.listCharacter[0];
         for (int i = 1; i < range.listCharacter.Count; i++)
@@ -83,9 +96,9 @@ public class Character : MonoBehaviour, IHit
         }
     }
 
-    void SpawnThrow()
+    public void SpawnThrow()
     {
-        Weapon weapon = Instantiate(weaponThrow, weaponInHand.transform.position, weaponInHand.transform.rotation).GetComponent<Weapon>();
+        Weapon weapon = Instantiate(weaponThrow, weaponInHand.transform.position, Quaternion.identity).GetComponent<Weapon>();
         weapon.SetVelocity(GetCharacterToAttack().transform.position);
         weapon.SetMaxSpace(rangeSize);
     }
@@ -94,5 +107,10 @@ public class Character : MonoBehaviour, IHit
     {
         isAttacking = false;
         ChangeAnim(Constant.ANIM_IDLE);
+    }
+
+    public void Despawn()
+    {
+        Destroy(gameObject);
     }
 }
