@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Player : Character
 {
-    [SerializeField] float speed;
     [SerializeField] Transform checkGround;
     [SerializeField] LayerMask layerGround;
     Vector3 fisrtPointJoystick;
@@ -16,6 +15,7 @@ public class Player : Character
         RaycastHit hit;
         return Physics.Raycast(checkGround.position, Vector2.down, out hit, 1.5f, layerGround);
     }
+
 
 
     private void Update()
@@ -41,7 +41,6 @@ public class Player : Character
                     {
                         SetState(new PlayerController());
                         rb.velocity = new Vector3((distan.normalized * speed).x, rb.velocity.y, (distan.normalized * speed).z);
-                        ChangeAnim(Constant.ANIM_RUN);
                     }
                     else
                     {

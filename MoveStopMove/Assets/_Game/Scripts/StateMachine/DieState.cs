@@ -9,6 +9,7 @@ public class DieState : IState
     {
         character.ChangeAnim(Constant.ANIM_DIE);
         character.isDead = true;
+        character.rb.velocity = new Vector3(0, character.rb.velocity.y, 0);
     }
 
     public void OnStay(Character character)

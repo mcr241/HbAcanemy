@@ -1,18 +1,33 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
-public class Bot : MonoBehaviour
+public class Bot : Character
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] float timeDelayMove;
+    [SerializeField] NavMeshAgent nav;
+    [SerializeField] float rangeMove;
+
+    float time;
+
+    private void OnEnable()
     {
-        
+        SetState(new MoveState());
+    }
+    private void Update()
+    {
+        currentstate.OnStay(this);
+        time += Time.deltaTime;
+        if (!isDead)
+        {
+            if (time > timeDelayMove)
+            {
+                SetState(new MoveState());
+                time = 0;
+            }
+        }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+
 }

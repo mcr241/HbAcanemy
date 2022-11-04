@@ -6,7 +6,7 @@ public class PlayerController : IState
 {
     public void OnEnter(Character character)
     {
-
+        character.ChangeAnim(Constant.ANIM_RUN);
     }
 
     public void OnStay(Character character)
@@ -16,8 +16,6 @@ public class PlayerController : IState
 
     public void OnExit(Character character)
     {
-        character.rb.velocity = new Vector3(0, character.rb.velocity.y, 0);
-        character.ChangeAnim(Constant.ANIM_IDLE);
-        character.SetState(new IdleState());
+
     }
 }

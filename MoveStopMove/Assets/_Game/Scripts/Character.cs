@@ -12,13 +12,14 @@ public class Character : MonoBehaviour, IHit
     public float timeDespawn;
     [SerializeField] Range range;
     [SerializeField] float rangeSize;
+    public float speed;
 
     protected float timeAttack;
     protected float timeDie;
     public bool isDead = false;
     protected bool isAttacking = false;
     protected string nameAnimTotal = Constant.ANIM_IDLE;
-    [HideInInspector] public IState currentstate;
+    [HideInInspector] public IState currentstate = new IdleState();
     public void ChangeAnim(string nameAnim)
     {
         if (nameAnim != nameAnimTotal)
@@ -44,8 +45,7 @@ public class Character : MonoBehaviour, IHit
 
     void Die()
     {
-        ChangeAnim(Constant.ANIM_DIE);
-        isDead = true;
+        SetState(new DieState());
     }
     public Character GetCharacterToAttack()
     {
@@ -74,10 +74,13 @@ public class Character : MonoBehaviour, IHit
 
     public void SetState(IState state)
     {
-        currentstate.OnExit(this);
+        if (currentstate != state)
+        {
+            currentstate.OnExit(this);
 
-        currentstate = state;
-        currentstate.OnEnter(this);
+            currentstate = state;
+            currentstate.OnEnter(this);
+        }
     }
 
     public void Despawn()

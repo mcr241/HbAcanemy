@@ -60,9 +60,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 356911381073298050}
+  collider: {fileID: 8852437908290848195}
   speed: 10
   speedAngular: -10
-  maxSpace: 0
+  maxSpace: 5
+  timeDelay: 0.1
 --- !u!54 &356911381073298050
 Rigidbody:
   m_ObjectHideFlags: 0

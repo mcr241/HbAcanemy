@@ -5,9 +5,13 @@ using UnityEngine;
 public class Weapon : MonoBehaviour
 {
     [SerializeField] Rigidbody rb;
+    [SerializeField] Collider collider;
     [SerializeField] float speed;
     [SerializeField] float speedAngular;
     [SerializeField] float maxSpace;
+    [SerializeField] float timeDelay;
+
+    float time = 0;
 
     Vector3 firstPoint;
 
@@ -21,6 +25,8 @@ public class Weapon : MonoBehaviour
         vector.y = 0;
         rb.velocity = speed * vector.normalized;
         rb.angularVelocity = new Vector3(0, speedAngular, 0);
+        collider.enabled = false;
+        time = 0;
     }
 
     public void SetMaxSpace(float value)
@@ -31,6 +37,14 @@ public class Weapon : MonoBehaviour
     private void Update()
     {
         CheckSpace();
+        if (!collider.enabled)
+        {
+            time += Time.deltaTime;
+            if (time > timeDelay)
+            {
+                collider.enabled = true;
+            }
+        }
     }
 
     protected void CheckSpace()
