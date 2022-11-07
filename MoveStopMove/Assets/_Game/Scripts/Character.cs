@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Character : MonoBehaviour, IHit
+public class Character : GameUnit, IHit
 {
     public Rigidbody rb;
     [SerializeField] Animator animator;
     [SerializeField] GameObject weaponInHand;
-    [SerializeField] GameObject weaponThrow;
+    [SerializeField] GameUnit weaponThrow;
     public float timeThrow;
     public float timeDespawn;
     [SerializeField] Range range;
@@ -19,7 +19,7 @@ public class Character : MonoBehaviour, IHit
     public bool isDead = false;
     protected bool isAttacking = false;
     protected string nameAnimTotal = Constant.ANIM_IDLE;
-    [HideInInspector] public IState currentstate = new IdleState();
+    public IState currentstate = new IdleState();
     public void ChangeAnim(string nameAnim)
     {
         if (nameAnim != nameAnimTotal)
@@ -47,31 +47,39 @@ public class Character : MonoBehaviour, IHit
     {
         SetState(new DieState());
     }
-    public Character GetCharacterToAttack()
+    public GameObject GetCharacterToAttack()
     {
-        if (range.listCharacter == null)
+        /*if (!CanAttack())
             return null;
-        Character character = range.listCharacter[0];
-        for (int i = 1; i < range.listCharacter.Count; i++)
+        int j=0;
+        while (j < range.listCharacter.Count && range.listCharacter[j].isDead)
         {
-            if (Vector3.Distance(range.listCharacter[i].transform.position, transform.position) < Vector3.Distance(character.transform.position, transform.position))
+            j++;
+        }
+        if (j >= range.listCharacter.Count) return null;
+
+        Character character = range.listCharacter[j];
+        for (int i = j + 1; i < range.listCharacter.Count; i++)
+        {
+            if (!range.listCharacter[i].isDead && Vector3.Distance(range.listCharacter[i].transform.position, transform.position) < Vector3.Distance(character.transform.position, transform.position))
             {
                 character = range.listCharacter[i];
             }
-        }
-        return character;
+        }*/
+        return range.GetCharacterNear().gameObject;
     }
 
     public bool CanAttack()
     {
-        return range.listCharacter != null && range.listCharacter.Count > 0;
+        return range.GetCharacterNear() != null;
     }
 
     public void SpawnThrow(Vector3 target)
     {
-        Weapon weapon = Instantiate(weaponThrow, weaponInHand.transform.position, Quaternion.identity).GetComponent<Weapon>();
+        Weapon weapon = SimplePool.Spawn(weaponThrow, weaponInHand.transform.position, Quaternion.identity).GetComponent<Weapon>();
         weapon.SetVelocity(target);
         weapon.SetMaxSpace(rangeSize);
+        weapon.owner = this;
     }
 
     public void SetState(IState state)
@@ -85,8 +93,19 @@ public class Character : MonoBehaviour, IHit
         }
     }
 
-    public void Despawn()
+    public virtual void Despawn()
     {
-        Destroy(gameObject);
+        SimplePool.Despawn(this);
+    }
+
+    public override void OnInit()
+    {
+        currentstate = new IdleState();
+        rb.velocity = Vector3.zero;
+        isDead = false;
+    }
+
+    public override void OnDespawn()
+    {
     }
 }

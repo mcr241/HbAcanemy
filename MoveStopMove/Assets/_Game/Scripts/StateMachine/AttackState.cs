@@ -9,24 +9,37 @@ public class AttackState : IState
     Vector3 target;
     public void OnEnter(Character character)
     {
-        target = character.GetCharacterToAttack().transform.position;
-        character.SetRotation(target - character.transform.position);
-        character.ChangeAnim(Constant.ANIM_ATTACK);
-        time = 0;
-        checkSpawn = false;
+        GameObject character1 = character.GetCharacterToAttack();
+        if (character1 != null)
+        {
+            target = character1.transform.position;
+            character.SetRotation(target - character.transform.position);
+            character.ChangeAnim(Constant.ANIM_ATTACK);
+            time = 0;
+            checkSpawn = false;
+        }
+        else
+        {
+            character.SetState(new IdleState());
+        }
     }
 
     public void OnStay(Character character)
     {
+        time += Time.deltaTime;
         if (!checkSpawn)
         {
-            time += Time.deltaTime;
             if (time >= character.timeThrow)
             {
                 checkSpawn = true;
                 character.SpawnThrow(target);
-                character.ChangeAnim(Constant.ANIM_IDLE);
-                //OnExit(character);
+            }
+        }
+        else
+        {
+            if (time >= character.timeThrow * 2)
+            {
+                character.SetState(new IdleState());
             }
         }
     }

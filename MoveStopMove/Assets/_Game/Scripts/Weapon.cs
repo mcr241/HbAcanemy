@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Weapon : MonoBehaviour
+public class Weapon : GameUnit
 {
     [SerializeField] Rigidbody rb;
     [SerializeField] Collider collider;
@@ -10,23 +10,18 @@ public class Weapon : MonoBehaviour
     [SerializeField] float speedAngular;
     [SerializeField] float maxSpace;
     [SerializeField] float timeDelay;
+    public IHit owner;
 
-    float time = 0;
 
     Vector3 firstPoint;
 
-    private void OnEnable()
-    {
-        firstPoint = transform.position;
-    }
     public void SetVelocity(Vector3 target)
     {
+        firstPoint = transform.position;
         Vector3 vector = target - transform.position;
         vector.y = 0;
         rb.velocity = speed * vector.normalized;
         rb.angularVelocity = new Vector3(0, speedAngular, 0);
-        collider.enabled = false;
-        time = 0;
     }
 
     public void SetMaxSpace(float value)
@@ -37,14 +32,6 @@ public class Weapon : MonoBehaviour
     private void Update()
     {
         CheckSpace();
-        if (!collider.enabled)
-        {
-            time += Time.deltaTime;
-            if (time > timeDelay)
-            {
-                collider.enabled = true;
-            }
-        }
     }
 
     protected void CheckSpace()
@@ -57,12 +44,25 @@ public class Weapon : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Cache.GetHit(other).GetHit();
-        Despawn();
+        if (Cache.GetHit(other) != owner)
+        {
+            Cache.GetHit(other).GetHit();
+            Despawn();
+        }
     }
 
     void Despawn()
     {
-        Destroy(gameObject);
+        SimplePool.Despawn(this);
+    }
+
+    public override void OnInit()
+    {
+
+    }
+
+    public override void OnDespawn()
+    {
+
     }
 }

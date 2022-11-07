@@ -21,7 +21,7 @@ public class Bot : Character
         time += Time.deltaTime;
         if (!isDead)
         {
-            if (time > timeDelayMove)
+            if (time > timeDelayMove && currentstate is IdleState)
             {
                 SetState(new MoveState());
                 time = 0;
@@ -29,5 +29,11 @@ public class Bot : Character
         }
     }
 
+    public override void Despawn()
+    {
+        LevelManager.Instance.SpawnBot();
+        transform.position = 100 * Vector3.one;
+        base.Despawn();
+    }
 
 }

@@ -6,6 +6,8 @@ public class Range : MonoBehaviour
 {
     public List<Character> listCharacter;
     [SerializeField] SphereCollider sphere;
+    [SerializeField] LayerMask layerMask;
+    
 
     private void OnTriggerEnter(Collider other)
     {
@@ -21,6 +23,13 @@ public class Range : MonoBehaviour
         {
             listCharacter.Remove(other.GetComponent<Character>());
         }
+    }
+
+    public Collider GetCharacterNear()
+    {
+        RaycastHit hit;
+        Physics.SphereCast(transform.position, sphere.radius, Vector3.zero, out hit, Mathf.Infinity, layerMask);
+        return hit.collider;
     }
 
     public void SetRange(float range)

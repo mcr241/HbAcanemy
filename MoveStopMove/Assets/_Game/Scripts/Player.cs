@@ -61,4 +61,9 @@ public class Player : Character
         }
     }
 
+
+    public override void Despawn()
+    {
+        Destroy(gameObject);
+    }
 }

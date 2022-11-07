@@ -2,17 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelManager 
+public class LevelManager : Singleton<LevelManager>
 {
-    // Start is called before the first frame update
-    void Start()
+    public List<Bot> botsInMap = new List<Bot>();
+
+    public GameUnit botPrefab;
+
+    [SerializeField] Transform centerPoint;
+    [SerializeField] float sizeMap;
+    [SerializeField] int numberBots;
+
+
+
+    public void SpawnBot()
     {
-        
+        botsInMap.Add(SimplePool.Spawn(botPrefab, NavMeshUtil.GetRandomPoint(centerPoint.position, sizeMap), Quaternion.identity).GetComponent<Bot>());
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Awake()
     {
-        
+        for (int i = 0; i < numberBots; i++)
+        {
+            SpawnBot();
+        }
     }
+
 }
