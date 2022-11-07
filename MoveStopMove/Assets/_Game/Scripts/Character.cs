@@ -49,6 +49,8 @@ public class Character : MonoBehaviour, IHit
     }
     public Character GetCharacterToAttack()
     {
+        if (range.listCharacter == null)
+            return null;
         Character character = range.listCharacter[0];
         for (int i = 1; i < range.listCharacter.Count; i++)
         {
@@ -65,10 +67,10 @@ public class Character : MonoBehaviour, IHit
         return range.listCharacter != null && range.listCharacter.Count > 0;
     }
 
-    public void SpawnThrow()
+    public void SpawnThrow(Vector3 target)
     {
         Weapon weapon = Instantiate(weaponThrow, weaponInHand.transform.position, Quaternion.identity).GetComponent<Weapon>();
-        weapon.SetVelocity(GetCharacterToAttack().transform.position);
+        weapon.SetVelocity(target);
         weapon.SetMaxSpace(rangeSize);
     }
 

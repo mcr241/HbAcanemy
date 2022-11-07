@@ -6,9 +6,11 @@ public class AttackState : IState
 {
     float time;
     bool checkSpawn = false;
+    Vector3 target;
     public void OnEnter(Character character)
     {
-        character.SetRotation(character.GetCharacterToAttack().transform.position - character.transform.position);
+        target = character.GetCharacterToAttack().transform.position;
+        character.SetRotation(target - character.transform.position);
         character.ChangeAnim(Constant.ANIM_ATTACK);
         time = 0;
         checkSpawn = false;
@@ -22,7 +24,7 @@ public class AttackState : IState
             if (time >= character.timeThrow)
             {
                 checkSpawn = true;
-                character.SpawnThrow();
+                character.SpawnThrow(target);
                 character.ChangeAnim(Constant.ANIM_IDLE);
                 //OnExit(character);
             }
