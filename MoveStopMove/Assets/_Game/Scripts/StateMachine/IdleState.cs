@@ -12,7 +12,12 @@ public class IdleState : IState
 
     public void OnStay(Character character)
     {
-        if (character.CanAttack()) character.SetState(new AttackState());
+        if (character.CanAttack())
+        {
+            //Debug.Log("attack");
+            character.SetState(new AttackState());
+        }
+
     }
 
     public void OnExit(Character character)

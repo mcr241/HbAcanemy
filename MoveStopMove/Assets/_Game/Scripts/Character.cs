@@ -2,24 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public class DataWeapon
+{
+    public WeaponType type;
+    public GameObject weaponHand;
+    public GameUnit weaponThrow;
+}
+
 public class Character : GameUnit, IHit
 {
     public Rigidbody rb;
     [SerializeField] Animator animator;
-    [SerializeField] GameObject weaponInHand;
-    [SerializeField] GameUnit weaponThrow;
+    [SerializeField] DataWeapon[] dataWeapon;
     public float timeThrow;
     public float timeDespawn;
     [SerializeField] Range range;
     [SerializeField] float rangeSize;
     public float speed;
 
+    public WeaponType weaponType;
     protected float timeAttack;
     protected float timeDie;
     public bool isDead = false;
     protected bool isAttacking = false;
     protected string nameAnimTotal = Constant.ANIM_IDLE;
     public IState currentstate = new IdleState();
+
     public void ChangeAnim(string nameAnim)
     {
         if (nameAnim != nameAnimTotal)
@@ -76,7 +85,7 @@ public class Character : GameUnit, IHit
 
     public void SpawnThrow(Vector3 target)
     {
-        Weapon weapon = SimplePool.Spawn(weaponThrow, weaponInHand.transform.position, Quaternion.identity).GetComponent<Weapon>();
+        Weapon weapon = SimplePool.Spawn(dataWeapon[(int)weaponType].weaponThrow, dataWeapon[(int)weaponType].weaponHand.transform.position, Quaternion.identity) as Weapon;
         weapon.SetVelocity(target);
         weapon.SetMaxSpace(rangeSize);
         weapon.owner = this;
@@ -100,12 +109,23 @@ public class Character : GameUnit, IHit
 
     public override void OnInit()
     {
-        currentstate = new IdleState();
+        LoadWeapon();
+        SetState(new MoveState());
         rb.velocity = Vector3.zero;
         isDead = false;
     }
 
     public override void OnDespawn()
     {
+
+    }
+
+    public void LoadWeapon()
+    {
+        weaponType = (WeaponType)Random.RandomRange(0, dataWeapon.Length);
+        for (int i = 0; i < dataWeapon.Length; i++)
+        {
+            dataWeapon[i].weaponHand.SetActive(dataWeapon[i].type == weaponType);
+        }
     }
 }

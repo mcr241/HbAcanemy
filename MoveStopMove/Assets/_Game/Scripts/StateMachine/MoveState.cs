@@ -8,9 +8,9 @@ public class MoveState : IState
 
     public void OnEnter(Character character)
     {
-        endPoint = NavMeshUtil.GetRandomPoint(character.transform.position, 20);
-        character.SetRotation(endPoint- character.transform.position);
         character.ChangeAnim(Constant.ANIM_RUN);
+        endPoint = NavMeshUtil.GetRandomPoint(character.transform.position, 10);
+        character.SetRotation(endPoint- character.transform.position);
     }
 
     public void OnStay(Character character)

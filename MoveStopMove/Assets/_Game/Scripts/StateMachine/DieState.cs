@@ -17,12 +17,11 @@ public class DieState : IState
         time += Time.deltaTime;
         if (time >= character.timeDespawn)
         {
-            OnExit(character);
+            character.Despawn();
         }
     }
 
     public void OnExit(Character character)
     {
-        character.Despawn();
     }
 }

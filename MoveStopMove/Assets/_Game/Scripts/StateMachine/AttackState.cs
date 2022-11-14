@@ -20,6 +20,7 @@ public class AttackState : IState
         }
         else
         {
+            Debug.Log("idle");
             character.SetState(new IdleState());
         }
     }

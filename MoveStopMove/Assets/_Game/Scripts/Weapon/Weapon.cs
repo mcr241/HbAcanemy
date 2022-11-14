@@ -2,12 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum WeaponType
+{
+    Hammer, Knife, Bomerang
+}
+
 public class Weapon : GameUnit
 {
-    [SerializeField] Rigidbody rb;
+    [SerializeField] protected Rigidbody rb;
     [SerializeField] Collider collider;
     [SerializeField] float speed;
-    [SerializeField] float speedAngular;
     [SerializeField] float maxSpace;
     [SerializeField] float timeDelay;
     public IHit owner;
@@ -15,13 +19,12 @@ public class Weapon : GameUnit
 
     Vector3 firstPoint;
 
-    public void SetVelocity(Vector3 target)
+    public virtual void SetVelocity(Vector3 target)
     {
         firstPoint = transform.position;
         Vector3 vector = target - transform.position;
         vector.y = 0;
         rb.velocity = speed * vector.normalized;
-        rb.angularVelocity = new Vector3(0, speedAngular, 0);
     }
 
     public void SetMaxSpace(float value)
@@ -53,6 +56,7 @@ public class Weapon : GameUnit
 
     void Despawn()
     {
+        OnDespawn();
         SimplePool.Despawn(this);
     }
 

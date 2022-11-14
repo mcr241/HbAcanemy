@@ -16,7 +16,9 @@ public class LevelManager : Singleton<LevelManager>
 
     public void SpawnBot()
     {
-        botsInMap.Add(SimplePool.Spawn(botPrefab, NavMeshUtil.GetRandomPoint(centerPoint.position, sizeMap), Quaternion.identity).GetComponent<Bot>());
+        Bot bot = SimplePool.Spawn(botPrefab, NavMeshUtil.GetRandomPoint(centerPoint.position, sizeMap), Quaternion.identity) as Bot;
+        bot.OnInit();
+        botsInMap.Add(bot);
     }
 
     private void Awake()

@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6277203934403389274}
   - component: {fileID: 8852437908290848195}
-  - component: {fileID: 2891271774294415538}
   - component: {fileID: 356911381073298050}
+  - component: {fileID: -4887243307412973149}
   m_Layer: 7
   m_Name: Hammer
   m_TagString: Untagged
@@ -47,25 +47,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.5042099, y: 0.2384461, z: 1}
   m_Center: {x: 0.002685845, y: 0, z: -0.02508479}
---- !u!114 &2891271774294415538
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7439707912057253960}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7176b5d4237b5b4897d2b8adee2005f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  poolType: 0
-  rb: {fileID: 356911381073298050}
-  collider: {fileID: 8852437908290848195}
-  speed: 15
-  speedAngular: -10
-  maxSpace: 5
-  timeDelay: 0.1
 --- !u!54 &356911381073298050
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -82,6 +63,25 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-4887243307412973149
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7439707912057253960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0f7adfc2b50deb48a8705130d95a3ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolType: 0
+  rb: {fileID: 356911381073298050}
+  collider: {fileID: 8852437908290848195}
+  speed: 20
+  maxSpace: 5
+  timeDelay: 0.1
+  speedAngular: 20
 --- !u!1001 &6748941479407922181
 PrefabInstance:
   m_ObjectHideFlags: 0

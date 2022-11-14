@@ -9,6 +9,10 @@ public class Player : Character
     Vector3 fisrtPointJoystick;
     bool isOnJoystick;
 
+    private void Start()
+    {
+        LoadWeapon();
+    }
 
     bool CheckGround()
     {
