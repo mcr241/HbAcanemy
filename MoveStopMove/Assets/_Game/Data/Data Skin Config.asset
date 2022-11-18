@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0755c6403d3d3c48af9d64ce37062b1, type: 3}
+  m_Name: Data Skin Config
+  m_EditorClassIdentifier: 
+  data:
+  - name: Red
+    data:
+    - type: 4
+      materials:
+      - {fileID: 2100000, guid: f686d57d3e3a4354093dee26b7e6a6be, type: 2}
+  - name: Yellow
+    data:
+    - type: 4
+      materials:
+      - {fileID: 2100000, guid: b1af461473b09ce41b22484c0803396e, type: 2}
+  - name: Thor
+    data:
+    - type: 4
+      materials:
+      - {fileID: 2100000, guid: 30a820dab7967584daf8cf3bc8e86401, type: 2}
+  - name: Black
+    data:
+    - type: 4
+      materials:
+      - {fileID: 2100000, guid: 636efcd9c6d7c314a84b880f02a3be5b, type: 2}
+  - name: Green
+    data:
+    - type: 4
+      materials:
+      - {fileID: 2100000, guid: 98950148b7b46d7448263bfeed68a443, type: 2}

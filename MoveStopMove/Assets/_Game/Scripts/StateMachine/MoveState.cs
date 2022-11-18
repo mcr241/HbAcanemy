@@ -10,7 +10,7 @@ public class MoveState : IState
     {
         character.ChangeAnim(Constant.ANIM_RUN);
         endPoint = NavMeshUtil.GetRandomPoint(character.transform.position, 10);
-        character.SetRotation(endPoint- character.transform.position);
+        character.SetRotation(endPoint - character.transform.position);
     }
 
     public void OnStay(Character character)

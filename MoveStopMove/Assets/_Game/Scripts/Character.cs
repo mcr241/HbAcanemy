@@ -128,4 +128,6 @@ public class Character : GameUnit, IHit
             dataWeapon[i].weaponHand.SetActive(dataWeapon[i].type == weaponType);
         }
     }
+
+
 }

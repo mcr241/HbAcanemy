@@ -34,6 +34,12 @@ public class Bot : Character
         LevelManager.Instance.SpawnBot();
         //transform.position = 100 * Vector3.one;
         base.Despawn();
+        UIManager.Instance.gamePlayPanel.targetIndicatior.DeSpawn();
     }
 
+    public override void OnInit()
+    {
+        base.OnInit();
+
+    }
 }
